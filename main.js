@@ -44,6 +44,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                 console.log(resp.headers);
                 console.log(data);
                 console.log(resp.statusCode);
+                if(resp.statusCode===302)check(resp.headers.location);
                 //check();
             }    
             console.log(path);
