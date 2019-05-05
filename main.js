@@ -38,7 +38,7 @@ let check=()=>{
     });
 };
 check();
-interval=setInterval(check,1000*60*60)//check every 60 mins
+interval=setInterval(check,1000*60*1)//check every 1 mins
 
 
 http.createServer((req,res)=>{
