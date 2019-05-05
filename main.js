@@ -5,7 +5,7 @@ let changed=false;
 let changedDate=null;
 let interval=null;
 let check=()=>{
-    http.get({'host':'cbseresults.nic.in','path':'/cbseresults_cms/Public/Home.aspx','headers':{'user-agent':'/cbseresults_cms/Public/Home.aspx'}},resp=>{
+    http.get({'host':'cbseresults.nic.in','path':'/cbseresults_cms/Public/Home.aspx','headers':{'user-agent':'/cbseresults_cms/Public/Home.aspx','pragma':'no-cache','cache-control':'no-cache','referer':'https://www.google.com/'}},resp=>{
         let data="";
         resp.on('data',chunk=>{
             data+=chunk;
