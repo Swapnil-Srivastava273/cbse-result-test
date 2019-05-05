@@ -5,7 +5,7 @@ let changed=false;
 let changedDate=null;
 let interval=null;
 let check=()=>{
-    http.get(cbse,resp=>{
+    http.get({'host':'cbseresults.nic.in','path':'/cbseresults_cms/Public/Home.aspx','headers':{'user-agent':'/cbseresults_cms/Public/Home.aspx'}},resp=>{
         let data="";
         resp.on('data',chunk=>{
             data+=chunk;
@@ -22,12 +22,15 @@ let check=()=>{
                     check();
                     console.log("Some stupid redirect ?");
                     console.log(data);
+                    console.log(resp.headers);
                 }else{
                     console.log("still no change :c");
                 }
             }else{
                 console.log(resp.headers);
                 console.log(data);
+                console.log(resp.statusCode);
+                check();
             }    
 
             console.log(`Tried for ${++count} th time at ${(new Date()).toString()}`);
@@ -42,4 +45,4 @@ http.createServer((req,res)=>{
     res.writeHead(200,{"content-type":"text/plain"});
     res.end(`${count} ${changed} ${changed?changedDate:''}`);
 }).listen(process.env.PORT||5000);
- 
+
