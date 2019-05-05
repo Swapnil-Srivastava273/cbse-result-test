@@ -21,10 +21,14 @@ let check=()=>{
                 }else if(!(data.length>300)){
                     check();
                     console.log("Some stupid redirect ?");
+                    console.log(data);
                 }else{
                     console.log("still no change :c");
                 }
-            }
+            }else{
+                console.log(resp.headers);
+                console.log(data);
+            }    
 
             console.log(`Tried for ${++count} th time at ${(new Date()).toString()}`);
         });
