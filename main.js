@@ -1,11 +1,41 @@
-"use strict"
-let http=require("http");
-const emoji=["😂",'😀','😅','🤓','😜','😎','🙂','😊','😐','😄','☹','😇','😒','🤔','😝','😊','😑','😶','😲','😰','😓','😱','😖','😌','😫','🙄','😑','😈','😵','🤧','🤑',"🤤"];
-http.createServer((req,res)=>{
-    res.writeHead(200,{"content-type":"text/html;charset=utf-8"});
-    res.write(`<!doctype html><head><title>Infinite Emoji Test</title><meta name="viewport" content="width=device-width"/><style>body{background:linear-gradient( 90deg , rgb(191, 64, 64), rgb(204, 166, 51), rgb(128, 191, 64), rgb(64, 191, 128), rgb(64, 191, 191), rgb(64, 64, 191), rgb(191, 64, 149));}</style></head><body>`);
-    let interval=setInterval(()=>{res.write(emoji[Math.floor(Math.random()*emoji.length)]);},100);
-    req.on('close',()=>{
-        clearInterval(interval);
+const cbse="http://cbseresults.nic.in/cbseresults_cms/Public/Home.aspx";
+const http=require("http");
+let count=0;
+let changed=false;
+let changedDate=null;
+let interval=null;
+let check=()=>{
+    http.get(cbse,resp=>{
+        let data="";
+        resp.on('data',chunk=>{
+            data+=chunk;
+        });
+        resp.on('end',()=>{
+            if(resp.statusCode===200){
+                if(!data.includes("(Last Update :02/05/2019)")&&data.length>300){
+                    console.log("Something has changed !!!");
+                    console.log(data+'\n\n');
+                    changed=true;
+                    changedDate=new Date();
+                    if(interval)clearInterval(interval);
+                }else if(!(data.length>300)){
+                    check();
+                    console.log("Some stupid redirect ?");
+                }else{
+                    console.log("still no change :c");
+                }
+            }
+
+            console.log(`Tried for ${++count} th time at ${(new Date()).toString()}`);
+        });
     });
+};
+check();
+interval=setInterval(check,1000*60*60)//check every 60 mins
+
+
+http.createServer((req,res)=>{
+    res.writeHead(200,{"content-type":"text/plain"});
+    res.end(`${count} ${changed} ${changed?changedDate:''}`);
 }).listen(process.env.PORT||5000);
+
