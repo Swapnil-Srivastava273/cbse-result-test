@@ -19,6 +19,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                     changed=true;
                     changedDate=new Date();
                     if(interval)clearInterval(interval);
+                    count++;
                 }else if(!(data.length>300)){
                     //check();
                     console.log("Some stupid redirect ?");
@@ -34,21 +35,22 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                     };
                     vm.createContext(sandbox);
                     let code=data.match(/<\/script><script>[^<]*<\/script><\/html>/)[0].slice(17,-16);
-                    vm.runInContext("y.location.assign=function(x){y.loc=x;};"+code,sandbox);
+                    vm.runInContext("y.location.assign=function(x){y.loc=x;};"+code,sandbox); //all this for the stupid redirects
                     //console.log(sandbox.y.loc);
                     check(sandbox.y.loc);
-                    }else{
+                }else{
                     console.log("still no change :c");
+                    count++;
                 }
             }else{
                 console.log(resp.headers);
                 console.log(data);
                 console.log(resp.statusCode);
-                if(resp.statusCode===302)check(resp.headers.location);
+                if(resp.statusCode===302)check(resp.headers.location); //redirect
                 //check();
             }    
             console.log(path);
-            console.log(`Tried for ${++count} th time at ${(new Date()).toString()}`);
+            console.log(`Tried for ${count} th time at ${(new Date()).toString()}`);
         });
     });
 };
