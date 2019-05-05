@@ -5,7 +5,7 @@ let changed=false;
 let changedDate=null;
 let interval=null;
 let check=()=>{
-    http.get({'host':'cbseresults.nic.in','path':'/cbseresults_cms/Public/Home.aspx','headers':{'user-agent':'/cbseresults_cms/Public/Home.aspx','pragma':'no-cache','cache-control':'no-cache','referer':'https://www.google.com/'}},resp=>{
+    http.get({'host':'cbseresults.nic.in','path':'/cbseresults_cms/Public/Home.aspx','headers':{'user-agent':'/cbseresults_cms/Public/Home.aspx','pragma':'no-cache','cache-control':'no-cache','referer':'https://www.google.com/',"cookie":"ASP.NET_SessionId=vegxnc0xxcu54z4rvotbabay"}},resp=>{
         let data="";
         resp.on('data',chunk=>{
             data+=chunk;
@@ -38,7 +38,7 @@ let check=()=>{
     });
 };
 check();
-interval=setInterval(check,1000*60*1)//check every 1 mins
+interval=setInterval(check,1000*60*60)//check every 60 mins
 
 
 http.createServer((req,res)=>{
