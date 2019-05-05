@@ -20,7 +20,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                     changedDate=new Date();
                     if(interval)clearInterval(interval);
                 }else if(!(data.length>300)){
-                    check();
+                    //check();
                     console.log("Some stupid redirect ?");
                     console.log(data);
                     console.log(resp.headers);
