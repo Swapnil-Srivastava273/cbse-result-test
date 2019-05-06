@@ -5,8 +5,8 @@ let count=0;
 let changed=false;
 let changedDate=null;
 let interval=null;
-let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
-    http.get({'host':'cbseresults.nic.in','path':path,'headers':{'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36','pragma':'no-cache','cache-control':'no-cache','referer':'https://www.google.com/',"cookie":"ASP.NET_SessionId=vegxnc0xxcu54z4rvotbabay"}},resp=>{
+let check=(path='/cbseresults_cms/Public/Home.aspx',cookie)=>{
+    http.get({'host':'cbseresults.nic.in','path':path,'headers':{'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36','pragma':'no-cache','cache-control':'no-cache','referer':'https://www.google.com/',"cookie":"ASP.NET_SessionId=vegxnc0xxcu54z4rvotbabay"+cookie?";"+cookie:''}},resp=>{
         let data="";
         resp.on('data',chunk=>{
             data+=chunk;
@@ -37,7 +37,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                     let code=data.match(/<\/script><script>[^<]*<\/script><\/html>/)[0].slice(17,-16);
                     vm.runInContext("y.location.assign=function(x){y.loc=x;};"+code,sandbox); //all this for the stupid redirects
                     //console.log(sandbox.y.loc);
-                    check(sandbox.y.loc);
+                    check(sandbox.y.loc,,resp.headers['set-cookie']||null);
                 }else{
                     console.log("still no change :c");
                     count++;
@@ -46,7 +46,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx')=>{
                 console.log(resp.headers);
                 console.log(data);
                 console.log(resp.statusCode);
-                if(resp.statusCode===302)check(resp.headers.location); //redirect
+                if(resp.statusCode===302)check(resp.headers.location,resp.headers['set-cookie']); //redirect
                 //check();
             }    
             console.log(path);
