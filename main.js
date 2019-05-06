@@ -37,7 +37,7 @@ let check=(path='/cbseresults_cms/Public/Home.aspx',cookie)=>{
                     let code=data.match(/<\/script><script>[^<]*<\/script><\/html>/)[0].slice(17,-16);
                     vm.runInContext("y.location.assign=function(x){y.loc=x;};"+code,sandbox); //all this for the stupid redirects
                     //console.log(sandbox.y.loc);
-                    check(sandbox.y.loc,,resp.headers['set-cookie']||null);
+                    check(sandbox.y.loc,resp.headers['set-cookie']||null);
                 }else{
                     console.log("still no change :c");
                     count++;
